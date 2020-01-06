@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="config.mybatis.mapper.oracle.board.board">
+	
+	
+	<sql id="searchWhere">
+		<if test="searchKeyword!=null and searchKeyword != ''">
+			where ${searchCondition} like '%' || #{searchKeyword} || '%'
+		</if>
+	</sql>
+	
+	<select id="selectAll" parameterType="searchVo" resultType="boardVo">
+		select rownum as RNUM, A.*
+		    from
+		    (
+		        select 
+		        	board_seq, board_type, board_title, board_contents, hits, reg_date
+		        from tbl_board
+				<include refid="searchWhere"></include>
+				order by board_seq desc
+		    )A
+		
+	</select>
+	
+	
+	<insert id="insertReBoard" parameterType="boardVo">
+		<selectKey	keyProperty="boardSeq" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual
+		</selectKey>
+		insert into tbl_board (board_seq, board_type, board_title, board_contents, reg_date)
+		values (#{boardSeq}, 1, #{boardTitle}, #{boardContents}, sysdate)
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
