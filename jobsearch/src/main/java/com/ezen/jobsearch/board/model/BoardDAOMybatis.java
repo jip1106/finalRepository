@@ -35,13 +35,13 @@ public class BoardDAOMybatis implements BoardDAO{
 		return cnt;
 	}
 	
-	public BoardVO selectByNo(int no){
-		BoardVO vo=sqlSession.selectOne(namespace+"selectByNo", no);
+	public BoardVO selectByNo(int seq){
+		BoardVO vo=sqlSession.selectOne(namespace+"selectByNo", seq);
 		return vo;
 	}
 	
-	public int updateReBoard(BoardVO vo){
-		int cnt=sqlSession.update(namespace+"updateReBoard", vo);
+	public int updateBoard(BoardVO vo){
+		int cnt=sqlSession.update(namespace+"updateBoard", vo);
 		return cnt;
 	}
 
@@ -51,8 +51,8 @@ public class BoardDAOMybatis implements BoardDAO{
 		return pwd;
 	}
 	
-	public void deleteReBoard(Map<String, String> map) {
-		sqlSession.delete(namespace+"deleteReBoard", map);
+	public int deleteBoard(int seq) {
+		return sqlSession.delete(namespace+"deleteBoard", seq);
 	}
 
 	@Override

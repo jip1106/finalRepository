@@ -42,14 +42,14 @@
 </c:if>
 
 <!-- 페이징 처리 관련 form -->
-<%-- <form action="<c:url value='/reBoard/list.do'/>" 
+<form action="<c:url value='/board/list.do'/>" 
 	name="frmPage" method="post">
 	<input type="hidden" name="searchCondition" 
 		value="${param.searchCondition}">
 	<input type="hidden" name="searchKeyword" 
 		value="${param.searchKeyword}">
 	<input type="hidden" name="currentPage" >
-</form> --%>
+</form>
 
 <div class="divList">
 <table class="box2"
@@ -82,7 +82,14 @@
 				<tr  style="text-align:center">
 					<td>${vo.boardSeq}</td>
 					<td style="text-align:left">
-						${vo.boardTitle}
+					
+					<a href
+			="<c:url value='/board/countUpdate.do?seq=${vo.boardSeq}'/>">
+											${vo.boardTitle}									
+							</a>
+					
+					
+					
 						</td>
 					<td>${vo.boardContents}</td>
 					
@@ -98,7 +105,7 @@
 	  </tbody>
 </table>	   
 </div>
-<%-- <div class="divPage">
+<div class="divPage">
 	<!-- 이전블럭으로 이동 -->
 	<c:if test="${pagingInfo.firstPage>1 }">	
 		<a href="#" onclick="pageFunc(${pagingInfo.firstPage-1})">
@@ -125,26 +132,22 @@
 			<img src="<c:url value='/resources/images/last.JPG'/>" alt="다음 블럭으로">
 		</a>
 	</c:if>	
-</div> --%>
+</div>
 <div class="divSearch">
    	<form name="frmSearch" method="post" 
    		action='<c:url value="/board/list.do"/>'>
         <select name="searchCondition">
-            <option value="title" 
-            	<c:if test="${param.searchCondition=='title' }">
+            <option value="board_title" 
+            	<c:if test="${param.searchCondition=='board_title' }">
             		selected="selected"
             	</c:if>
             >제목</option>
-            <option value="content" 
-            	<c:if test="${param.searchCondition=='content' }">
+            <option value="board_contents" 
+            	<c:if test="${param.searchCondition=='board_contents' }">
             		selected="selected"
             	</c:if>
             >내용</option>
-            <option value="name" 
-            	<c:if test="${param.searchCondition=='name' }">
-            		selected="selected"
-            	</c:if>
-            >작성자</option>
+           
         </select>   
         <input type="text" name="searchKeyword" title="검색어 입력"
         	value="${param.searchKeyword}">   

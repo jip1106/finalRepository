@@ -30,13 +30,13 @@ public class BoardServiceImpl implements BoardService{
 		return reBoardDao.updateReadCount(no);
 	}
 		
-	public BoardVO selectByNo(int no){
-		return reBoardDao.selectByNo(no);
+	public BoardVO selectByNo(int seq){
+		return reBoardDao.selectByNo(seq);
 	}
 	
 	
-	public int updateReBoard(BoardVO vo){
-		return reBoardDao.updateReBoard(vo);
+	public int updateBoard(BoardVO vo){
+		return reBoardDao.updateBoard(vo);
 	}
 
 	@Override
@@ -44,14 +44,14 @@ public class BoardServiceImpl implements BoardService{
 		String dbPwd=reBoardDao.selectPwd(no);
 		
 		if(dbPwd.equals(pwd)) {
-			return true;  //鍮꾨�踰덊샇 �씪移�
+			return true;  
 		}else {
-			return false; //遺덉씪移�
+			return false; 
 		}
 	}
 		
-	public void deleteReBoard(Map<String, String> map){
-		reBoardDao.deleteReBoard(map);
+	public int deleteBoard(int seq){
+		return reBoardDao.deleteBoard(seq);
 	}
 
 	@Override
@@ -74,6 +74,8 @@ public class BoardServiceImpl implements BoardService{
 		
 		return cnt;		
 	}
+
+
 	
 	
 	

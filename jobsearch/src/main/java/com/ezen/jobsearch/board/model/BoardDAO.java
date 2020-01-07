@@ -12,10 +12,10 @@ public interface BoardDAO {
 	public int insertReBoard(BoardVO vo);
 	
 	public int updateReadCount(int no);
-	public BoardVO selectByNo(int no);
-	public int updateReBoard(BoardVO vo);
+	public BoardVO selectByNo(int seq);
+	public int updateBoard(BoardVO vo);
 	public String selectPwd(int no);
-	public void deleteReBoard(Map<String, String> map);
+	public int deleteBoard(int seq);
 	public int selectTotalRecord(SearchVO searchVo);
 	public int updateDownCount(int no);
 	public int updateSortNo(BoardVO vo);

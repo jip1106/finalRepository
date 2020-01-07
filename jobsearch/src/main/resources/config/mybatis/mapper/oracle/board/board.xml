@@ -12,6 +12,10 @@
 	</sql>
 	
 	<select id="selectAll" parameterType="searchVo" resultType="boardVo">
+		
+		select *
+		from
+		(
 		select rownum as RNUM, A.*
 		    from
 		    (
@@ -21,6 +25,11 @@
 				<include refid="searchWhere"></include>
 				order by board_seq desc
 		    )A
+		 )
+		    where RNUM > #{firstRecordIndex} 
+		<![CDATA[
+		and RNUM<= #{firstRecordIndex} + #{recordCountPerPage}
+		]]>
 		
 	</select>
 	
@@ -32,6 +41,34 @@
 		insert into tbl_board (board_seq, board_type, board_title, board_contents, reg_date)
 		values (#{boardSeq}, 1, #{boardTitle}, #{boardContents}, sysdate)
 	</insert>
+	
+	<update id="updateReadCount" parameterType="int">
+		update tbl_board
+		set hits=hits+1
+		where board_seq=#{seq}
+	</update>
+	
+	<select id="selectByNo" parameterType="int" resultType="boardVo">
+		select * from tbl_board where board_seq=#{no}
+	</select>
+	
+	<delete id="deleteBoard" parameterType="int">
+		delete from tbl_board
+		where board_seq=#{seq}
+	</delete>
+	
+	<update id="updateBoard" parameterType="boardVo">
+		update tbl_board
+		set board_title=#{boardTitle},
+			board_contents=#{boardContents}
+				
+		where board_seq=#{boardSeq}
+	</update>
+	
+	<select id="selectTotalRecord" parameterType="searchVo" resultType="int">
+		select count(*) from tbl_board
+		<include refid="searchWhere"></include>
+	</select>
 	
 </mapper>
 

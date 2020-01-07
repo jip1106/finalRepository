@@ -30,47 +30,28 @@ public class BoardController {
 	=LoggerFactory.getLogger(BoardController.class); 
 
 	@Autowired
-	private BoardService reBoardService;
+	private BoardService BoardService;
 
 	@RequestMapping("/list.do")
 	public String list(@ModelAttribute SearchVO searchVo, 
 				Model model) {
+	
+		PaginationInfo pagingInfo=new PaginationInfo();
+		pagingInfo.setBlockSize(Utility.BLOCK_SIZE);
+		pagingInfo.setRecordCountPerPage(Utility.RECORD_COUNT);
+		pagingInfo.setCurrentPage(searchVo.getCurrentPage());
 		
-		//1
-		//logger.info("湲� 紐⑸�?, �뙆�씪誘명�? searchVo={}",searchVo);
+		searchVo.setRecordCountPerPage(Utility.RECORD_COUNT);
+		searchVo.setFirstRecordIndex(pagingInfo.getFirstRecordIndex());
 		
-		//[1] ?��?���? PaginationInfo媛앹껜瑜�? �깮�꽦�븯�뿬 firstRecordIndex 媛�?�쓣 ?��?�븳�떎
-		/*
-		 * PaginationInfo pagingInfo=new PaginationInfo();
-		 * pagingInfo.setBlockSize(Utility.BLOCK_SIZE);
-		 * pagingInfo.setRecordCountPerPage(Utility.RECORD_COUNT);
-		 * pagingInfo.setCurrentPage(searchVo.getCurrentPage());
-		 */
+		List<BoardVO> list=BoardService.selectAll(searchVo);
 		
-		//[2] searchVo�뿉 recordCountPerPage�� firstRecordIndex?���? ��?��?���븳�떎
-		/*
-		 * searchVo.setRecordCountPerPage(Utility.RECORD_COUNT);
-		 * searchVo.setFirstRecordIndex(pagingInfo.getFirstRecordIndex());
-		 */
+		int totalRecord=BoardService.selectTotalRecord(searchVo);
+	
+		pagingInfo.setTotalRecord(totalRecord);
 		
-		//logger.info("媛� ��?��?�� �썑 searchVo={}", searchVo);
-		
-		//2
-		List<BoardVO> list=reBoardService.selectAll(searchVo);
-		logger.info(list.toString());
-		logger.info("湲�紐⑸�? 寃곌?��, list.size={}", list.size());
-		
-		//[3] �젅?��붾뱶 媛쒖?�� 議고?���썑 ��?��?��
-		/*
-		 * int totalRecord=reBoardService.selectTotalRecord(searchVo);
-		 * logger.info("totalRecord={}", totalRecord);
-		 * 
-		 * pagingInfo.setTotalRecord(totalRecord);
-		 */
-		
-		//3
 		model.addAttribute("list", list);
-		/* model.addAttribute("pagingInfo", pagingInfo); */
+		model.addAttribute("pagingInfo", pagingInfo);
 		
 		return "board/boardList";
 	}
@@ -85,19 +66,16 @@ public class BoardController {
 	@RequestMapping(value="/write.do", method = RequestMethod.POST)
 	public String write_post(@ModelAttribute BoardVO BoardVo, 
 			HttpServletRequest request, Model model) {
-		//1
-		logger.info("湲��벑濡�, �뙆�씪誘명꽣 vo={}",BoardVo);
 		
-		//2
 		String msg="", url="";
-		int cnt=reBoardService.insertReBoard(BoardVo);
-		logger.info("湲��벑濡� 寃곌낵, cnt={}", cnt);
+		int cnt=BoardService.insertReBoard(BoardVo);
+	
 
 		if(cnt>0) {
-			msg="湲��벑濡앸릺�뿀�뒿�땲�떎.";
+			
 			url="/board/list.do";
 		}else {
-			msg="湲��벑濡� �떎�뙣!";
+			
 			url="/board/write.do";
 		}
 
@@ -107,6 +85,107 @@ public class BoardController {
 
 		return "common/message";
 	}
+	
+	@RequestMapping("/countUpdate.do")
+	public String countUpdate(@RequestParam(defaultValue = "0") int seq,
+			Model model) {
+	
+		if(seq==0) {
+		
+			model.addAttribute("url", "/board/list.do");
+			
+			return "common/message";
+		}
+		
+		int cnt=BoardService.updateReadCount(seq);
+		
+		return "redirect:/board/detail.do?seq="+seq;		
+	}
+	
+	@RequestMapping("/detail.do")
+	public String detail(@RequestParam(defaultValue = "0") int seq,
+			Model model) {
+		
+		if(seq==0) {
+			
+			model.addAttribute("url", "/board/list.do");
+			
+			return "common/message";
+		}
+		
+		BoardVO BoardVo=BoardService.selectByNo(seq);
+
+
+		model.addAttribute("vo", BoardVo);
+		
+		
+		return "board/boardDetail";
+	}
+	
+	@RequestMapping(value="/delete.do", method = RequestMethod.GET)
+	public String delete_get(@RequestParam(defaultValue = "0") int seq,
+			Model model) {
+	
+		String msg="", url="";
+		int cnt=BoardService.deleteBoard(seq);
+
+		if(cnt>0) {
+			msg="�궘�젣�꽦怨�";
+			url="/board/list.do";
+		}else {
+			msg="�궘�젣�떎�뙣";
+			url="/board/detail.do?seq="+seq;
+		}
+
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		
+		return "common/message";
+	}
+	
+	
+	@RequestMapping(value="/edit.do", method =RequestMethod.GET)
+	public String edit_get(@RequestParam(defaultValue = "0") int seq,
+			Model model) {
+		
+		if(seq==0) {
+			model.addAttribute("url", "/board/list.do");
+			
+			return "common/message";
+		}
+		
+		BoardVO BoardVo=BoardService.selectByNo(seq);
+		
+		model.addAttribute("vo", BoardVo);
+		
+		return "board/boardEdit";
+	}
+	
+	@RequestMapping(value="/edit.do", method = RequestMethod.POST)
+	public String edit_post(@ModelAttribute BoardVO BoardVo,
+			HttpServletRequest request,	Model model) {
+		
+		String msg="", url="";
+		
+			int cnt=BoardService.updateBoard(BoardVo);
+			if(cnt>0) {
+				
+				msg="�닔�젙�꽦怨�";
+				url="/board/list.do";
+				
+			}else {
+				msg="�닔�젙�떎�뙣";
+				url="/reBoard/detail.do?no="+BoardVo.getBoardSeq();
+			}
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("url", url);
+		
+		return "common/message";
+	}
+	
+	
+	
 	
 	
 	
