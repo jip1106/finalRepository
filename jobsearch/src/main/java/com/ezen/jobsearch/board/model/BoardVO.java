@@ -9,6 +9,11 @@ public class BoardVO {
 	private String boardContents;
 	private Timestamp regDate;
 	private int hits;
+	
+	//reply
+	private int commentSeq;
+	private String commentDesc;
+	
 	public int getBoardSeq() {
 		return boardSeq;
 	}

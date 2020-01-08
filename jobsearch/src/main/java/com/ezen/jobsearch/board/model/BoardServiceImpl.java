@@ -24,7 +24,9 @@ public class BoardServiceImpl implements BoardService{
 		return reBoardDao.insertReBoard(vo);
 	}
 	
-
+	public int insertReply(CommentVO vo){
+		return reBoardDao.insertReply(vo);
+	}
 	
 	public int updateReadCount(int no){
 		return reBoardDao.updateReadCount(no);
@@ -32,6 +34,10 @@ public class BoardServiceImpl implements BoardService{
 		
 	public BoardVO selectByNo(int seq){
 		return reBoardDao.selectByNo(seq);
+	}
+	
+	public CommentVO selectReplyByNo(int seq){
+		return reBoardDao.selectReplyByNo(seq);
 	}
 	
 	
@@ -50,8 +56,8 @@ public class BoardServiceImpl implements BoardService{
 		}
 	}
 		
-	public int deleteBoard(int seq){
-		return reBoardDao.deleteBoard(seq);
+	public int deleteBoard(int seq, int type){
+		return reBoardDao.deleteBoard(seq, type);
 	}
 
 	@Override
@@ -63,16 +69,12 @@ public class BoardServiceImpl implements BoardService{
 	public int updateDownCount(int no) {
 		return reBoardDao.updateDownCount(no);
 	}
+	
+	
 
 	@Override
-	@Transactional
-	public int reply(BoardVO vo) {
-		//�듃�옖�옲�뀡 泥섎━
-		int cnt=reBoardDao.updateSortNo(vo);
-		
-		cnt=reBoardDao.reply(vo);
-		
-		return cnt;		
+	public List<CommentVO> reply(){
+		return reBoardDao.reply();
 	}
 
 

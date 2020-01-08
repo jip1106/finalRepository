@@ -99,9 +99,42 @@
 					</td>	
 				</tr> 
 			  <!--반복처리 끝  -->
+			  
+	
+			  
+	  			<c:forEach var="reply" items="${replylist }">		
+	  			
+	  					  <c:if test="${vo.boardSeq eq reply.refBoardseq }">	
+				<tr  style="text-align:center">
+					
+					<td colspan="4"  style="text-align:left">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<c:url value='/resources/images/re.gif'/>" 
+									alt="re이미지">
+					<a href
+			="<c:url value='/board/detail.do?seq=${reply.commentSeq}&type=2'/>">
+											${reply.commentDesc}									
+							</a>
+					
+					
+					
+						</td>
+					
+					
+					
+					<td><fmt:formatDate value="${reply.regDate}" 
+						pattern="yyyy-MM-dd"/>
+					</td>	
+				</tr> 
+				</c:if>	
+			  <!--반복처리 끝  -->
+	  			
+	  		</c:forEach>
+	  			
+	  			
 	  			
 	  		</c:forEach>
 	  	</c:if>
+	 	
 	  </tbody>
 </table>	   
 </div>

@@ -30,6 +30,15 @@ public class BoardDAOMybatis implements BoardDAO{
 		return cnt;
 	}
 	
+	public int insertReply(CommentVO vo) {
+		int cnt=sqlSession.insert(namespace+"insertReply", vo);
+		return cnt;
+	}
+	
+	
+	
+	
+	
 	public int updateReadCount(int no){
 		int cnt=sqlSession.update(namespace+"updateReadCount", no);
 		return cnt;
@@ -37,6 +46,11 @@ public class BoardDAOMybatis implements BoardDAO{
 	
 	public BoardVO selectByNo(int seq){
 		BoardVO vo=sqlSession.selectOne(namespace+"selectByNo", seq);
+		return vo;
+	}
+	
+	public CommentVO selectReplyByNo(int seq){
+		CommentVO vo=sqlSession.selectOne(namespace+"selectReplyByNo", seq);
 		return vo;
 	}
 	
@@ -51,8 +65,17 @@ public class BoardDAOMybatis implements BoardDAO{
 		return pwd;
 	}
 	
-	public int deleteBoard(int seq) {
-		return sqlSession.delete(namespace+"deleteBoard", seq);
+	public int deleteBoard(int seq, int type) {
+		
+		String delete = "";
+		
+		if (type == 1) {
+			delete = "deleteBoard";
+		} else if (type == 2) {
+			delete = "deleteReply";
+		}
+		
+		return sqlSession.delete(namespace+delete, seq);
 	}
 
 	@Override
@@ -72,8 +95,11 @@ public class BoardDAOMybatis implements BoardDAO{
 	}
 
 	@Override
-	public int reply(BoardVO vo) {
-		return sqlSession.insert(namespace+"reply", vo);
+	public List<CommentVO> reply(){
+		List<CommentVO> replylist
+			=sqlSession.selectList(namespace+"reply");
+		
+		return replylist;
 	}
 	
 	
