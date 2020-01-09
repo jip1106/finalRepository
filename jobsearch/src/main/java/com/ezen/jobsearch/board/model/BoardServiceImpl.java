@@ -12,69 +12,64 @@ import com.ezen.jobsearch.common.*;
 @Service
 public class BoardServiceImpl implements BoardService{
 	@Autowired
-	private BoardDAO reBoardDao;
+	private BoardDAO boardDao;
 		
 
 	public List<BoardVO> selectAll(SearchVO searchVo){
-		return reBoardDao.selectAll(searchVo);
+		return boardDao.selectAll(searchVo);
 	}
 	
 	
-	public int insertReBoard(BoardVO vo){
-		return reBoardDao.insertReBoard(vo);
+	public int insertBoard(BoardVO vo){
+		return boardDao.insertBoard(vo);
 	}
 	
 	public int insertReply(CommentVO vo){
-		return reBoardDao.insertReply(vo);
+		return boardDao.insertReply(vo);
 	}
 	
 	public int updateReadCount(int no){
-		return reBoardDao.updateReadCount(no);
+		return boardDao.updateReadCount(no);
 	}
 		
 	public BoardVO selectByNo(int seq){
-		return reBoardDao.selectByNo(seq);
+		return boardDao.selectByNo(seq);
 	}
 	
 	public CommentVO selectReplyByNo(int seq){
-		return reBoardDao.selectReplyByNo(seq);
+		return boardDao.selectReplyByNo(seq);
 	}
 	
 	
 	public int updateBoard(BoardVO vo){
-		return reBoardDao.updateBoard(vo);
+		return boardDao.updateBoard(vo);
+	}
+	
+	public int updateReply(CommentVO vo){
+		return boardDao.updateReply(vo);
 	}
 
-	@Override
-	public boolean checkPwd(int no, String pwd) {
-		String dbPwd=reBoardDao.selectPwd(no);
-		
-		if(dbPwd.equals(pwd)) {
-			return true;  
-		}else {
-			return false; 
-		}
-	}
+	
 		
 	public int deleteBoard(int seq, int type){
-		return reBoardDao.deleteBoard(seq, type);
+		return boardDao.deleteBoard(seq, type);
 	}
 
 	@Override
 	public int selectTotalRecord(SearchVO searchVo) {
-		return reBoardDao.selectTotalRecord(searchVo);
+		return boardDao.selectTotalRecord(searchVo);
 	}
 
 	@Override
 	public int updateDownCount(int no) {
-		return reBoardDao.updateDownCount(no);
+		return boardDao.updateDownCount(no);
 	}
 	
 	
 
 	@Override
 	public List<CommentVO> reply(){
-		return reBoardDao.reply();
+		return boardDao.reply();
 	}
 
 

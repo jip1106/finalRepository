@@ -25,8 +25,8 @@ public class BoardDAOMybatis implements BoardDAO{
 	}
 	
 	
-	public int insertReBoard(BoardVO vo) {
-		int cnt=sqlSession.insert(namespace+"insertReBoard", vo);
+	public int insertBoard(BoardVO vo) {
+		int cnt=sqlSession.insert(namespace+"insertBoard", vo);
 		return cnt;
 	}
 	
@@ -56,6 +56,11 @@ public class BoardDAOMybatis implements BoardDAO{
 	
 	public int updateBoard(BoardVO vo){
 		int cnt=sqlSession.update(namespace+"updateBoard", vo);
+		return cnt;
+	}
+	
+	public int updateReply(CommentVO vo){
+		int cnt=sqlSession.update(namespace+"updateReply", vo);
 		return cnt;
 	}
 

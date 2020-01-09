@@ -72,18 +72,17 @@ public class BoardController {
 			HttpServletRequest request, Model model) {
 		
 		String msg="", url="";
-		int cnt=BoardService.insertReBoard(BoardVo);
+		int cnt=BoardService.insertBoard(BoardVo);
 	
 
 		if(cnt>0) {
-			
+			msg="작성성공";
 			url="/board/list.do";
 		}else {
-			
+			msg="작성실패";
 			url="/board/write.do";
 		}
 
-		//3		
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
 
@@ -189,11 +188,14 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/edit.do", method = RequestMethod.POST)
-	public String edit_post(@ModelAttribute BoardVO BoardVo,
+	public String edit_post(@ModelAttribute BoardVO BoardVo, @RequestParam int type, @RequestParam int commentSeq, @ModelAttribute CommentVO vo,
 			HttpServletRequest request,	Model model) {
+		
 		
 		String msg="", url="";
 		
+		
+		if(type == 1) {		
 			int cnt=BoardService.updateBoard(BoardVo);
 			if(cnt>0) {
 				
@@ -202,8 +204,24 @@ public class BoardController {
 				
 			}else {
 				msg="수정실패";
-				url="/reBoard/detail.do?no="+BoardVo.getBoardSeq();
+				url="/board/detail.do?no="+BoardVo.getBoardSeq();
 			}
+			
+		} else if (type == 2) {
+			
+			int cnt=BoardService.updateReply(vo);
+			
+			if(cnt>0) {
+				
+				msg="수정성공";
+				url="/board/list.do";
+				
+			}else {
+				msg="수정실패";
+				url="/board/detail.do?seq="+commentSeq+"&type="+type;
+			}
+			
+		}
 		
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);

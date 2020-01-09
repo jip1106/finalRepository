@@ -9,7 +9,7 @@ public interface BoardDAO {
 	
 	public List<BoardVO> selectAll(SearchVO searchVo);
 	
-	public int insertReBoard(BoardVO vo);
+	public int insertBoard(BoardVO vo);
 	
 	public int insertReply(CommentVO vo);
 	
@@ -18,6 +18,7 @@ public interface BoardDAO {
 	public BoardVO selectByNo(int seq);
 	public CommentVO selectReplyByNo(int seq);
 	public int updateBoard(BoardVO vo);
+	public int updateReply(CommentVO vo);
 	public String selectPwd(int no);
 	public int deleteBoard(int seq, int type);
 	public int selectTotalRecord(SearchVO searchVo);

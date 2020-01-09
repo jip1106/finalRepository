@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<% String ctx = request.getContextPath();  %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,38 +11,39 @@
 <title>답변달기</title>
 <script type="text/javascript" 
 	src="<c:url value='/resources/js/jquery-3.4.1.min.js'/>"></script>
+	
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("form[name=frmWrite]").submit(function(){
-			if($("#title").val()==''){
-				alert("제목을 입력하세요");
-				$("#title").focus();
-				event.preventDefault();
-			}else if($("#name").val().length<1){
-				alert("이름을 입력하세요");
-				$("#name").focus();
-				event.preventDefault();
-			}else if(!$("#pwd").val()){
-				alert("비밀번호를 입력하세요");
-				$("#pwd").focus();
-				event.preventDefault();
-			}
-		});
-	});
+	
+	function replyedit() {
+		var a = "<%=ctx%>/board/edit.do";
+		alert(a);
+	}
+	
 </script>
 
 </head>
 <body>
 <div class="divForm">
-<form name="frmWrite" method="post" 
+<c:choose>
+			<c:when test="${empty replyrw }">
+			<form name="frmWrite" method="post" 
 	action="<c:url value='/board/reply.do'/>" >
+			</c:when>
+			<c:when test="${!empty replyrw }">
+			<form name="frmWrite" method="post" 
+	action="<c:url value='/board/edit.do'/>" >
+			</c:when>
+		</c:choose>
+
+
 	
 	<c:choose>
 			<c:when test="${empty replyrw }">
 				<input type="hidden" name="boardSeq" value="${vo.boardSeq}">
 			</c:when>
 			<c:when test="${!empty replyrw }">
-				<input type="hidden" name="boardSeq" value="${seq}">
+				<input type="hidden" id="commentSeq" name="commentSeq" value="${seq}">
+				<input type="hidden" id="type" name="type" value="${param.type}">
 			</c:when>
 		</c:choose>
 
